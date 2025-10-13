@@ -29,10 +29,10 @@ void BoltzmannSimulator::run(int nInteractions) {
 
 SimStats BoltzmannSimulator::getStats() const {
   SimStats s{0., 0.};
-  double sum = 0;
+  double sum{0.};
   for (double e : energies_) sum += e;
   s.mean = sum / molecules_;
-  double var = 0;
+  double var{0.};
   for (double e : energies_) var += (e - s.mean) * (e - s.mean);
   s.stddev = std::sqrt(var / molecules_);
   return s;
