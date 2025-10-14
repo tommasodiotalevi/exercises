@@ -11,8 +11,8 @@
 
 #include "boltzmann/boltzmann.h"
 
-//#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-//#include "doctest.h"
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest.h"
 
 void plotDistributionROOT(const std::vector<int> &interactions_list,
                           int molecules) {
@@ -93,7 +93,7 @@ void plotDistributionSTDOUT(const std::vector<int> &interaction_list,
   }
 }
 
-int main(int argc, char **argv) {
+int boltzmannDistribution(int argc, char **argv) {
   if (argc != 3) {
     std::cerr << "Usage: " << argv[0]
               << " molecules interactions[list(comma-separated)]"
@@ -116,14 +116,14 @@ int main(int argc, char **argv) {
   }
 
   // Plot using ROOT
-  plotDistributionROOT(interaction_list, molecules);
+  // plotDistributionROOT(interaction_list, molecules);
 
   // Plot using STDOUT
-  // plotDistributionSTDOUT(interaction_list, molecules);
+  plotDistributionSTDOUT(interaction_list, molecules);
 
   return 0;
 }
-/*
+
 TEST_CASE(
     "Test total energy conservation and that energies are always positive") {
   int molecules{1000};
@@ -142,4 +142,3 @@ TEST_CASE(
   }
   CHECK(finalEnergy == doctest::Approx(initialEnergy).epsilon(1e-9));
 }
-*/
