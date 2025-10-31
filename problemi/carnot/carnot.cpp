@@ -8,7 +8,7 @@
 #include "doctest.h"
 
 constexpr double R{8.314};
-constexpr double gamma{5. / 3};  // Per un gas monoatomico
+constexpr double gammaMono{5. / 3};  // Per un gas monoatomico
 
 class State {
   double V_;
@@ -51,13 +51,13 @@ double isothermal_work(const State& state1, const State& state2, int N) {
 double adiabatic_work(const State& state1, const State& state2, int N) {
   double dV{(state2.V() - state1.V()) / N};
   double work{0.0};
-  const double C{R * state1.T() * std::pow(state1.V(), gamma - 1)};
+  const double C{R * state1.T() * std::pow(state1.V(), gammaMono - 1)};
 
   State temp_state{state1};
 
   for (int i = 0; i < N; ++i) {
     double V2_step{temp_state.V() + dV};
-    double P2_step{C / std::pow(V2_step, gamma)};
+    double P2_step{C / std::pow(V2_step, gammaMono)};
     work += trapezoidalIntegration(dV, temp_state.P(), P2_step);
     temp_state.setV(V2_step);
     temp_state.setP(P2_step);
@@ -82,7 +82,7 @@ TEST_CASE("Adiabatic work correctness") {
   double Th{500.0};
   double Tl{300.0};
   State A{0.01, Th};
-  State B{A.V() * std::pow(Th / Tl, 1.0 / (gamma - 1)), Tl};
+  State B{A.V() * std::pow(Th / Tl, 1.0 / (gammaMono - 1)), Tl};
   int N{1000};
 
   double W_analytical{
@@ -99,8 +99,8 @@ TEST_CASE("Carnot efficiency comparison") {
   const double Va{0.01};     // Volume stato A
   const double Vb{10 * Va};  // Volume stato B
 
-  double Vc{Vb * std::pow(Th / Tl, 1.0 / (gamma - 1))};
-  double Vd{Va * std::pow(Th / Tl, 1.0 / (gamma - 1))};
+  double Vc{Vb * std::pow(Th / Tl, 1.0 / (gammaMono - 1))};
+  double Vd{Va * std::pow(Th / Tl, 1.0 / (gammaMono - 1))};
 
   State A{Va, Th};
   State B{Vb, Th};
@@ -117,8 +117,8 @@ TEST_CASE("Carnot efficiency comparison") {
     State A2{2 * Va, Th};   // Cambiamento volume iniziale
     State B2{10 * Va, Th};  // Mantengo lo stesso rapporto Vb/Va
 
-    Vc = B2.V() * std::pow(Th / Tl, 1.0 / (gamma - 1));
-    Vd = A2.V() * std::pow(Th / Tl, 1.0 / (gamma - 1));
+    Vc = B2.V() * std::pow(Th / Tl, 1.0 / (gammaMono - 1));
+    Vd = A2.V() * std::pow(Th / Tl, 1.0 / (gammaMono - 1));
 
     State C2{Vc, Tl};
     State D2{Vd, Tl};
